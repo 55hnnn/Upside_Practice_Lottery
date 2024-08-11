@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
 contract Lottery {
@@ -37,15 +37,15 @@ contract Lottery {
 
     function claim() external {
         require(block.timestamp >= drawTime, "Sell phase is in progress");
-        if (winner[msg.sender] == true){
-            payable(msg.sender).call{value:payout}("");
-        } 
-        else{
+        if (ticketHolders[winningNumber].length < 1){
             drawTime = block.timestamp + 24 hours;
             drawed = false;
         }
-        return;
+        else if (winner[msg.sender] == true){
+            payable(msg.sender).call{value:payout}("");
+        }
+        else return;
     }
 
-    receive() external payable {}
+    fallback() external payable {}
 }
